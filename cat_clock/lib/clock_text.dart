@@ -10,7 +10,8 @@ class ClockText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TextStyle(fontFamily: "Montserrat", fontSize: fontSize),
+      style: TextStyle(
+          fontFamily: "Montserrat", fontSize: fontSize, color: Colors.white),
     );
   }
 }
