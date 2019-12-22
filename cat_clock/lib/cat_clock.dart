@@ -12,12 +12,50 @@ class CatClock extends StatefulWidget {
 }
 
 class _CatClockState extends State<CatClock> {
+  Widget hourBubble(BuildContext context, BoxConstraints constrains) {
+    double width = constrains.biggest.width;
+    double height = constrains.biggest.height;
+    return Positioned(
+      left: -height,
+      width: height * 2,
+      height: height * 2,
+      child: Bubble(),
+    );
+  }
+
+  Widget colonBubble(BuildContext context, BoxConstraints constrains) {
+    double width = constrains.biggest.width;
+    double height = constrains.biggest.height;
+    return Positioned(
+      right: 0,
+      width: height / 2,
+      height: height / 2,
+      child: Bubble(),
+    );
+  }
+
+  Widget minuteBubble(BuildContext context, BoxConstraints constrains) {
+    double width = constrains.biggest.width;
+    double height = constrains.biggest.height;
+    return Positioned(
+      right: 0,
+      width: height / 2,
+      height: height / 2,
+      child: Bubble(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: <Widget>[Bubble()],
-      ),
+    return LayoutBuilder(
+      builder: (context, constrains) {
+        return Stack(
+          children: <Widget>[
+            hourBubble(context, constrains),
+            minuteBubble(context, constrains)
+          ],
+        );
+      },
     );
   }
 }
