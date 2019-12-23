@@ -62,9 +62,14 @@ class _BubbleState extends State<Bubble> with SingleTickerProviderStateMixin {
       builder: (context, constraints) {
         return scaleAnimationWidget(
           context,
-          CustomPaint(
-            painter: BubblePainter(color: widget.color),
-            size: constraints.biggest,
+          Stack(
+            children: <Widget>[
+              CustomPaint(
+                painter: BubblePainter(color: widget.color),
+                size: constraints.biggest,
+              ),
+              if (widget.child != null) widget.child
+            ],
           ),
         );
       },
