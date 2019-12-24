@@ -12,56 +12,35 @@ class CatClock extends StatefulWidget {
 }
 
 class _CatClockState extends State<CatClock> {
-  Widget hourBubble(BuildContext context, BoxConstraints constrains) {
-    double width = constrains.biggest.width;
-    double height = constrains.biggest.height;
-
+  Widget hourBubble(BuildContext context, double bubbleSide) {
     return Positioned(
-      left: 0,
-      width: height,
-      height: height,
+      width: bubbleSide,
+      height: bubbleSide,
       child: Bubble(
-        color: Color.fromRGBO(231, 76, 60, 1),
-        minScaleValue: 0.8,
-        maxScaleValue: 1.2,
+        color: Colors.red,
+        enableScaleAnimation: false,
         child: Center(
           child: Text(
             "59",
-            style: TextStyle(color: Colors.white, fontSize: 100),
+            style: TextStyle(color: Colors.white, fontSize: 80),
           ),
         ),
       ),
     );
   }
 
-  Widget colonBubble(BuildContext context, BoxConstraints constrains) {
-    double width = constrains.biggest.width;
-    double height = constrains.biggest.height;
-
+  Widget minuteBubble(BuildContext context, double bubbleSide) {
     return Positioned(
       right: 0,
-      width: height / 2,
-      height: height / 2,
-      child: Bubble(),
-    );
-  }
-
-  Widget minuteBubble(BuildContext context, BoxConstraints constrains) {
-    double width = constrains.biggest.width;
-    double height = constrains.biggest.height;
-
-    return Positioned(
-      left: width / 2,
-      top: (height - height * 2 / 3) / 2,
-      width: height * 2 / 3,
-      height: height * 2 / 3,
+      width: bubbleSide,
+      height: bubbleSide,
       child: Bubble(
-        minScaleValue: 0.8,
-        maxScaleValue: 1.2,
+        color: Colors.blue,
+        enableScaleAnimation: false,
         child: Center(
           child: Text(
             "59",
-            style: TextStyle(color: Colors.white, fontSize: 50),
+            style: TextStyle(color: Colors.white, fontSize: 80),
           ),
         ),
       ),
@@ -72,11 +51,25 @@ class _CatClockState extends State<CatClock> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constrains) {
+        double clockWidth = constrains.biggest.width;
+        double clockHeight = constrains.biggest.height;
+        double clockBubbleSide = clockHeight / 4 * 3;
+
         return ClipRect(
           child: Stack(
             children: <Widget>[
-              minuteBubble(context, constrains),
-              hourBubble(context, constrains),
+              Center(
+                child: SizedBox(
+                  width: clockBubbleSide / 6 * 11,
+                  height: clockBubbleSide,
+                  child: Stack(
+                    children: <Widget>[
+                      minuteBubble(context, clockBubbleSide),
+                      hourBubble(context, clockBubbleSide),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         );
