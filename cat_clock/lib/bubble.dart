@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,17 +8,15 @@ class Bubble extends StatefulWidget {
   final Color color;
   final bool enableScaleAnimation;
   final Duration scaleAnimationDuration;
-  final double minScaleValue;
-  final double maxScaleValue;
+  final Duration floatingAnimationDuration;
 
   Bubble({
     Key key,
     this.child,
-    this.color = Colors.black,
+    this.color = Colors.blue,
     this.enableScaleAnimation = true,
     this.scaleAnimationDuration = const Duration(seconds: 3),
-    this.minScaleValue = 0.95,
-    this.maxScaleValue = 1.05,
+    this.floatingAnimationDuration = const Duration(seconds: 3),
   }) : super(key: key);
 
   @override
@@ -25,51 +24,73 @@ class Bubble extends StatefulWidget {
 }
 
 class _BubbleState extends State<Bubble> with SingleTickerProviderStateMixin {
-  AnimationController _scaleAnimationController;
-  Animation<double> _scaleAnimation;
-  CurvedAnimation _curvedAnimation;
+  Timer _floatingAnimationTimer;
+  double _floatingVertical = 0;
+  double _floatingHorizontal = 0;
 
   @override
   void initState() {
     super.initState();
-    _scaleAnimationController = AnimationController(
-      duration: widget.scaleAnimationDuration,
-      vsync: this,
-    );
-    _curvedAnimation = CurvedAnimation(
-      parent: _scaleAnimationController,
-      curve: Curves.easeInOut,
-    );
-    _scaleAnimation =
-        Tween(begin: widget.minScaleValue, end: widget.maxScaleValue)
-            .animate(_curvedAnimation);
+    _floatingAnimationTimer =
+        Timer.periodic(widget.floatingAnimationDuration, (timer) {
+      setState(() {
+        Random random = Random();
+        _floatingVertical = random.nextInt(20).toDouble();
+        _floatingHorizontal = random.nextInt(20).toDouble();
+      });
+    });
   }
 
-  Widget scaleAnimationWidget(BuildContext context, Widget child) {
-    _scaleAnimationController.repeat(reverse: true);
-
-    return widget.enableScaleAnimation
-        ? ScaleTransition(
+  Widget floatingAnimationWrapper(Widget child) {
+    return Stack(
+      overflow: Overflow.visible,
+      children: <Widget>[
+        AnimatedPositioned(
             child: child,
-            scale: _scaleAnimation,
-          )
-        : child;
+            curve: Curves.easeInOut,
+            duration: widget.floatingAnimationDuration,
+            top: _floatingVertical,
+            left: _floatingHorizontal)
+      ],
+    );
+  }
+
+  Widget scaleAnimationWrapper(Widget child) {
+    return AnimatedContainer(
+      curve: Curves.easeInOut,
+      duration: widget.scaleAnimationDuration,
+      child: child,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return scaleAnimationWidget(
-          context,
-          Stack(
-            children: <Widget>[
-              CustomPaint(
-                painter: BubblePainter(color: widget.color),
-                size: constraints.biggest,
+        double smallestSide =
+            min(constraints.biggest.width, constraints.biggest.height);
+        return floatingAnimationWrapper(
+          scaleAnimationWrapper(
+            Container(
+              child: Stack(
+                children: <Widget>[
+                  CustomPaint(
+                    painter: BubblePainter(color: widget.color),
+                    size: Size.square(smallestSide),
+                  ),
+                  if (widget.child != null) widget.child
+                ],
               ),
-              if (widget.child != null) widget.child
-            ],
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: widget.color,
+                    blurRadius: 10,
+                  )
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -78,7 +99,6 @@ class _BubbleState extends State<Bubble> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _scaleAnimationController.dispose();
     super.dispose();
   }
 }
@@ -94,6 +114,18 @@ class BubblePainter extends CustomPainter {
     Paint paint = Paint();
     paint.color = color;
     canvas.drawCircle(Offset(radius, radius), radius, paint);
+    // canvas.drawShadow(
+    //   Path()
+    //     ..arcTo(
+    //       Rect.fromLTWH(0, 0, radius, radius),
+    //       0,
+    //       2 * pi,
+    //       false,
+    //     ),
+    //   color,
+    //   10,
+    //   false,
+    // );
   }
 
   @override

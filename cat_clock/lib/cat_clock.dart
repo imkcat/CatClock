@@ -47,27 +47,35 @@ class _CatClockState extends State<CatClock> {
     );
   }
 
+  Widget majorBubble(Color color, double side) {
+    return Expanded(
+      child: Center(
+        child: SizedBox(
+          height: side,
+          width: side,
+          child: Bubble(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constrains) {
         double clockWidth = constrains.biggest.width;
         double clockHeight = constrains.biggest.height;
-        double clockBubbleSide = clockHeight / 4 * 3;
+        double clockBubbleSide = clockHeight / 2;
 
         return ClipRect(
           child: Stack(
             children: <Widget>[
               Center(
-                child: SizedBox(
-                  width: clockBubbleSide / 6 * 11,
-                  height: clockBubbleSide,
-                  child: Stack(
-                    children: <Widget>[
-                      minuteBubble(context, clockBubbleSide),
-                      hourBubble(context, clockBubbleSide),
-                    ],
-                  ),
+                child: Row(
+                  children: <Widget>[
+                    majorBubble(Colors.red, clockBubbleSide),
+                    majorBubble(Colors.blue, clockBubbleSide),
+                  ],
                 ),
               )
             ],
