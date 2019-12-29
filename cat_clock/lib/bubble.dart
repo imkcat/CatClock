@@ -1,104 +1,113 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 class Bubble extends StatefulWidget {
   final Widget child;
   final Color color;
-  final bool enableScaleAnimation;
-  final Duration scaleAnimationDuration;
-  final Duration floatingAnimationDuration;
+  final double side;
+  final Duration lifeCycleDuration;
+  final Duration showInAnimationDuration;
+  final Duration showOutAnimationDuration;
 
   Bubble({
     Key key,
     this.child,
     this.color = Colors.blue,
-    this.enableScaleAnimation = true,
-    this.scaleAnimationDuration = const Duration(seconds: 3),
-    this.floatingAnimationDuration = const Duration(seconds: 3),
+    this.side = 50,
+    this.lifeCycleDuration = Duration.zero,
+    this.showInAnimationDuration = const Duration(seconds: 1),
+    this.showOutAnimationDuration = const Duration(seconds: 1),
   }) : super(key: key);
 
   @override
   _BubbleState createState() => _BubbleState();
 }
 
-class _BubbleState extends State<Bubble> with SingleTickerProviderStateMixin {
-  Timer _floatingAnimationTimer;
-  double _floatingVertical = 0;
-  double _floatingHorizontal = 0;
+class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
+  AnimationController _showInAnimationController;
+  AnimationController _showOutAnimationController;
+  Animation<double> _showInAnimation;
+  Animation<double> _showOutAnimation;
+  Timer _lifeCycleTimer;
 
   @override
   void initState() {
     super.initState();
-    _floatingAnimationTimer =
-        Timer.periodic(widget.floatingAnimationDuration, (timer) {
-      setState(() {
-        Random random = Random();
-        _floatingVertical = random.nextInt(20).toDouble();
-        _floatingHorizontal = random.nextInt(20).toDouble();
+    _showInAnimationController = AnimationController(
+        duration: widget.showInAnimationDuration, vsync: this);
+    _showOutAnimationController = AnimationController(
+        duration: widget.showOutAnimationDuration, vsync: this);
+
+    _showInAnimation = CurveTween(curve: Curves.elasticOut)
+        .chain(Tween(begin: 0, end: 1))
+        .animate(_showInAnimationController);
+    _showOutAnimation = CurveTween(curve: Curves.elasticOut)
+        .chain(Tween(begin: 1, end: 0))
+        .animate(_showOutAnimationController);
+
+    if (widget.lifeCycleDuration.compareTo(Duration.zero) > 0) {
+      _lifeCycleTimer = Timer(widget.lifeCycleDuration, () {
+        _showOutAnimationController.forward();
       });
-    });
+    }
   }
 
-  Widget floatingAnimationWrapper(Widget child) {
-    return Stack(
-      overflow: Overflow.visible,
-      children: <Widget>[
-        AnimatedPositioned(
-            child: child,
-            curve: Curves.easeInOut,
-            duration: widget.floatingAnimationDuration,
-            top: _floatingVertical,
-            left: _floatingHorizontal)
-      ],
+  Widget showInTransition(Widget child) {
+    return ScaleTransition(
+      scale: _showInAnimation,
+      child: child,
     );
   }
 
-  Widget scaleAnimationWrapper(Widget child) {
-    return AnimatedContainer(
-      curve: Curves.easeInOut,
-      duration: widget.scaleAnimationDuration,
+  Widget showOutTransition(Widget child) {
+    return ScaleTransition(
+      scale: _showOutAnimation,
       child: child,
+    );
+  }
+
+  Widget bubble() {
+    return SizedBox.fromSize(
+      child: Container(
+        child: Stack(
+          children: <Widget>[
+            CustomPaint(
+              painter: BubblePainter(color: widget.color),
+              size: Size.square(widget.side),
+            ),
+            if (widget.child != null) widget.child
+          ],
+        ),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: widget.color,
+              blurRadius: 10,
+            )
+          ],
+        ),
+      ),
+      size: Size.square(widget.side),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        double smallestSide =
-            min(constraints.biggest.width, constraints.biggest.height);
-        return floatingAnimationWrapper(
-          scaleAnimationWrapper(
-            Container(
-              child: Stack(
-                children: <Widget>[
-                  CustomPaint(
-                    painter: BubblePainter(color: widget.color),
-                    size: Size.square(smallestSide),
-                  ),
-                  if (widget.child != null) widget.child
-                ],
-              ),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: widget.color,
-                    blurRadius: 10,
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+    _showInAnimationController.forward();
+
+    return showInTransition(
+      showOutTransition(
+        bubble(),
+      ),
     );
   }
 
   @override
   void dispose() {
+    _showInAnimationController.dispose();
+    _showOutAnimationController.dispose();
     super.dispose();
   }
 }
@@ -110,22 +119,10 @@ class BubblePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double radius = min(size.width, size.height) / 2;
+    double radius = size.width / 2;
     Paint paint = Paint();
     paint.color = color;
     canvas.drawCircle(Offset(radius, radius), radius, paint);
-    // canvas.drawShadow(
-    //   Path()
-    //     ..arcTo(
-    //       Rect.fromLTWH(0, 0, radius, radius),
-    //       0,
-    //       2 * pi,
-    //       false,
-    //     ),
-    //   color,
-    //   10,
-    //   false,
-    // );
   }
 
   @override

@@ -12,20 +12,11 @@ class CatClock extends StatefulWidget {
 }
 
 class _CatClockState extends State<CatClock> {
-  Widget hourBubble(BuildContext context, double bubbleSide) {
+  Bubble _hourBubble;
+
+  Widget hourBubble(double bubbleSide) {
     return Positioned(
-      width: bubbleSide,
-      height: bubbleSide,
-      child: Bubble(
-        color: Colors.red,
-        enableScaleAnimation: false,
-        child: Center(
-          child: Text(
-            "59",
-            style: TextStyle(color: Colors.white, fontSize: 80),
-          ),
-        ),
-      ),
+      child: _hourBubble,
     );
   }
 
@@ -36,11 +27,11 @@ class _CatClockState extends State<CatClock> {
       height: bubbleSide,
       child: Bubble(
         color: Colors.blue,
-        enableScaleAnimation: false,
-        child: Center(
+        child: FittedBox(
+          fit: BoxFit.fitWidth,
           child: Text(
             "59",
-            style: TextStyle(color: Colors.white, fontSize: 80),
+            style: TextStyle(color: Colors.white),
           ),
         ),
       ),
@@ -60,6 +51,32 @@ class _CatClockState extends State<CatClock> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    _hourBubble = Bubble(
+      lifeCycleDuration: Duration(seconds: 1),
+      color: Colors.red,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Center(
+            child: SizedBox.fromSize(
+              size: constraints.biggest * 0.7,
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  "59",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constrains) {
@@ -68,17 +85,16 @@ class _CatClockState extends State<CatClock> {
         double clockBubbleSide = clockHeight / 2;
 
         return ClipRect(
-          child: Stack(
-            children: <Widget>[
-              Center(
-                child: Row(
-                  children: <Widget>[
-                    majorBubble(Colors.red, clockBubbleSide),
-                    majorBubble(Colors.blue, clockBubbleSide),
-                  ],
-                ),
-              )
-            ],
+          child: GestureDetector(
+            onTap: () {},
+            child: Container(
+              color: Colors.white,
+              child: Stack(
+                children: <Widget>[
+                  hourBubble(clockBubbleSide),
+                ],
+              ),
+            ),
           ),
         );
       },
