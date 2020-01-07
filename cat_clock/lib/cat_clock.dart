@@ -1,4 +1,6 @@
-import 'package:cat_clock/bubble.dart';
+import 'package:cat_clock/sky_controller.dart';
+import 'package:cat_clock/styled_text.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
 
@@ -11,93 +13,55 @@ class CatClock extends StatefulWidget {
   _CatClockState createState() => _CatClockState();
 }
 
-class _CatClockState extends State<CatClock> {
-  Bubble _hourBubble;
-
-  Widget hourBubble(double bubbleSide) {
-    return Positioned(
-      child: _hourBubble,
-    );
-  }
-
-  Widget minuteBubble(BuildContext context, double bubbleSide) {
-    return Positioned(
-      right: 0,
-      width: bubbleSide,
-      height: bubbleSide,
-      child: Bubble(
-        color: Colors.blue,
-        child: FittedBox(
-          fit: BoxFit.fitWidth,
-          child: Text(
-            "59",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget majorBubble(Color color, double side) {
-    return Expanded(
-      child: Center(
-        child: SizedBox(
-          height: side,
-          width: side,
-          child: Bubble(),
-        ),
-      ),
-    );
-  }
+class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
+  SkyController _skyController;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _skyController = SkyController();
+  }
 
-    _hourBubble = Bubble(
-      lifeCycleDuration: Duration(seconds: 1),
-      color: Colors.red,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Center(
-            child: SizedBox.fromSize(
-              size: constraints.biggest * 0.7,
-              child: FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text(
-                  "59",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          );
-        },
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  Widget time() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: StyledText(
+        "11:26",
+        fontSize: 50,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constrains) {
-        double clockWidth = constrains.biggest.width;
-        double clockHeight = constrains.biggest.height;
-        double clockBubbleSide = clockHeight / 2;
-
-        return ClipRect(
-          child: GestureDetector(
-            onTap: () {},
-            child: Container(
-              color: Colors.white,
-              child: Stack(
-                children: <Widget>[
-                  hourBubble(clockBubbleSide),
-                ],
-              ),
-            ),
+    return ClipRect(
+      child: Stack(
+        children: <Widget>[
+          FlareActor(
+            "assets/riva/Sky.flr",
+            controller: _skyController,
+            fit: BoxFit.cover,
           ),
-        );
-      },
+          time(),
+        ],
+      ),
     );
+  }
+
+  // WidgetsBindingObserver
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _skyController.refreshTime();
+    }
+    super.didChangeAppLifecycleState(state);
   }
 }
