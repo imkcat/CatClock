@@ -23,11 +23,11 @@ dependencies:
   flutter_clock_helper:
     path: ../flutter_clock_helper
   flare_flutter: ^1.5.4
+  material_design_icons_flutter: 3.4.4795
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

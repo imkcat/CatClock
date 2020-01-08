@@ -29,14 +29,68 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  Widget time() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: StyledText(
-        "11:26",
-        fontSize: 50,
-        fontWeight: FontWeight.w600,
+  Widget address() {
+    return SizedBox(
+      height: 30,
+      child: FittedBox(
+        fit: BoxFit.fitHeight,
+        child: StyledText(
+          "San Francisco",
+          fontWeight: FontWeight.w600,
+        ),
       ),
+    );
+  }
+
+  Widget temperature() {
+    return SizedBox(
+      height: 30,
+      child: FittedBox(
+        fit: BoxFit.fitHeight,
+        child: StyledText(
+          "-23°",
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget date() {
+    return SizedBox(
+      height: 30,
+      child: FittedBox(
+        fit: BoxFit.fitHeight,
+        child: StyledText(
+          "MON 01-07",
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget time() {
+    return SizedBox(
+      height: 30,
+      child: FittedBox(
+        fit: BoxFit.fitHeight,
+        child: StyledText(
+          "11:26",
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget frontWidgets() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        address(),
+        temperature(),
+        Spacer(),
+        date(),
+        time(),
+      ],
     );
   }
 
@@ -44,13 +98,14 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return ClipRect(
       child: Stack(
+        fit: StackFit.expand,
         children: <Widget>[
           FlareActor(
             "assets/riva/Sky.flr",
             controller: _skyController,
             fit: BoxFit.cover,
           ),
-          time(),
+          frontWidgets(),
         ],
       ),
     );
