@@ -13,10 +13,11 @@ class StyledText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-          fontFamily: "Open Sans",
-          fontSize: fontSize,
-          color: Colors.white,
-          fontWeight: fontWeight),
+        fontFamily: "Open Sans",
+        fontSize: fontSize,
+        color: Colors.white,
+        fontWeight: fontWeight,
+      ),
     );
   }
 }

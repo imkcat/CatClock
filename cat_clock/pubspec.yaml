@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -24,6 +24,7 @@ dependencies:
     path: ../flutter_clock_helper
   flare_flutter: ^1.5.4
   material_design_icons_flutter: 3.4.4795
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
