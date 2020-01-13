@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:cat_clock/open_sans_text.dart';
 import 'package:cat_clock/sky_controller.dart';
-import 'package:cat_clock/styled_text.dart';
 import 'package:cat_clock/utils/weather_condition.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
@@ -44,92 +44,81 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  Widget weather(double heightUnit) {
-    return Icon(
-      widget.model.weatherCondition.weatherIcon(),
-      color: Colors.white,
-      size: heightUnit * 2,
+  Widget temperature(double heightUnit) {
+    double temperature = widget.model.temperature;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.ideographic,
+      children: <Widget>[
+        OpenSansText(
+          "${temperature.round()}",
+          fontWeight: FontWeight.w400,
+          fontSize: heightUnit,
+        ),
+        OpenSansText(
+          "°",
+          fontWeight: FontWeight.w300,
+          fontSize: heightUnit,
+        ),
+        Icon(
+          widget.model.weatherCondition.weatherIcon(),
+          color: Colors.white,
+          size: heightUnit * 0.5,
+        ),
+      ],
     );
   }
 
   Widget address(double heightUnit) {
-    return SizedBox(
-      height: heightUnit * 0.7,
-      child: FittedBox(
-        fit: BoxFit.fitHeight,
-        child: StyledText(
-          widget.model.location,
-          fontWeight: FontWeight.w400,
-        ),
-      ),
-    );
-  }
-
-  Widget temperature(double heightUnit) {
-    double temperature = widget.model.temperature;
-    return SizedBox(
-      height: heightUnit * 1.5,
-      child: FittedBox(
-        fit: BoxFit.fitHeight,
-        child: StyledText(
-          "${temperature.round()}°",
-          fontWeight: FontWeight.w400,
-        ),
-      ),
+    return OpenSansText(
+      widget.model.location,
+      fontWeight: FontWeight.w400,
+      fontSize: heightUnit * 0.5,
     );
   }
 
   Widget date(double heightUnit) {
-    return SizedBox(
-      height: heightUnit * 0.8,
-      child: FittedBox(
-        fit: BoxFit.fitHeight,
-        child: StyledText(
-          "${DateFormat("EEE").format(_clockDateTime)} ${DateFormat("MM-dd").format(_clockDateTime)}",
-          fontWeight: FontWeight.w300,
-        ),
-      ),
+    return OpenSansText(
+      "${DateFormat("EEE").format(_clockDateTime)} ${DateFormat("MM-dd").format(_clockDateTime)}",
+      fontWeight: FontWeight.w300,
+      fontSize: heightUnit * 0.6,
     );
   }
 
   Widget time(double heightUnit) {
-    return SizedBox(
-      height: heightUnit * 2,
-      child: FittedBox(
-        fit: BoxFit.fitHeight,
-        child: StyledText(
-          "${DateFormat("HH:mm").format(_clockDateTime)}",
-          fontWeight: FontWeight.w300,
-        ),
-      ),
+    return OpenSansText(
+      "${DateFormat("HH:mm").format(_clockDateTime)}",
+      fontWeight: FontWeight.w400,
+      fontSize: heightUnit * 2,
     );
   }
 
   Widget frontWidgets(double heightUnit) {
     return Padding(
       padding: EdgeInsets.all(heightUnit),
-      child: Row(
+      child: Column(
         children: <Widget>[
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                address(heightUnit),
-                Spacer(),
-                weather(heightUnit),
-              ],
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              temperature(heightUnit),
+              // weather(heightUnit),
+            ],
           ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                temperature(heightUnit),
-                Spacer(),
-                date(heightUnit),
-                time(heightUnit),
-              ],
-            ),
+          Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[date(heightUnit)],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: <Widget>[
+              address(heightUnit),
+              time(heightUnit),
+            ],
           )
         ],
       ),

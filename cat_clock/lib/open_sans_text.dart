@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-class StyledText extends StatelessWidget {
+class OpenSansText extends StatelessWidget {
   final String text;
   final double fontSize;
   final FontWeight fontWeight;
+  final double height;
 
-  const StyledText(this.text,
-      {this.fontSize, this.fontWeight = FontWeight.w400});
+  const OpenSansText(this.text,
+      {this.fontSize, this.fontWeight = FontWeight.w400, this.height});
 
   @override
   Widget build(BuildContext context) {
