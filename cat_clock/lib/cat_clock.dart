@@ -71,10 +71,12 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
   }
 
   Widget address(double heightUnit) {
-    return ClockFaceText(
-      widget.model.location,
-      fontWeight: FontWeight.w400,
-      fontSize: heightUnit * 0.5,
+    return Flexible(
+      child: ClockFaceText(
+        widget.model.location,
+        fontWeight: FontWeight.w400,
+        fontSize: heightUnit * 0.5,
+      ),
     );
   }
 

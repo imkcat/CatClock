@@ -13,12 +13,19 @@ class ClockFaceText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
-        fontFamily: "Open Sans",
-        fontSize: fontSize,
-        color: Colors.white,
-        fontWeight: fontWeight,
-      ),
+          fontFamily: "Open Sans",
+          fontSize: fontSize,
+          color: Colors.white,
+          fontWeight: fontWeight,
+          shadows: [
+            Shadow(
+              offset: Offset.zero,
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: fontSize * 0.1,
+            )
+          ]),
     );
   }
 }
