@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:cat_clock/open_sans_text.dart';
-import 'package:cat_clock/sky_controller.dart';
+import 'package:cat_clock/animation_controllers/sky_controller.dart';
 import 'package:cat_clock/utils/weather_condition.dart';
+import 'package:cat_clock/widgets/text/clock_face_text.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_clock_helper/model.dart';
@@ -51,12 +51,12 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.ideographic,
       children: <Widget>[
-        OpenSansText(
+        ClockFaceText(
           "${temperature.round()}",
           fontWeight: FontWeight.w400,
           fontSize: heightUnit,
         ),
-        OpenSansText(
+        ClockFaceText(
           "°",
           fontWeight: FontWeight.w300,
           fontSize: heightUnit,
@@ -71,7 +71,7 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
   }
 
   Widget address(double heightUnit) {
-    return OpenSansText(
+    return ClockFaceText(
       widget.model.location,
       fontWeight: FontWeight.w400,
       fontSize: heightUnit * 0.5,
@@ -79,7 +79,7 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
   }
 
   Widget date(double heightUnit) {
-    return OpenSansText(
+    return ClockFaceText(
       "${DateFormat("EEE").format(_clockDateTime)} ${DateFormat("MM-dd").format(_clockDateTime)}",
       fontWeight: FontWeight.w300,
       fontSize: heightUnit * 0.6,
@@ -87,7 +87,7 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
   }
 
   Widget time(double heightUnit) {
-    return OpenSansText(
+    return ClockFaceText(
       "${DateFormat("HH:mm").format(_clockDateTime)}",
       fontWeight: FontWeight.w400,
       fontSize: heightUnit * 2,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class OpenSansText extends StatelessWidget {
+class ClockFaceText extends StatelessWidget {
   final String text;
   final double fontSize;
   final FontWeight fontWeight;
   final double height;
 
-  const OpenSansText(this.text,
+  const ClockFaceText(this.text,
       {this.fontSize, this.fontWeight = FontWeight.w400, this.height});
 
   @override
