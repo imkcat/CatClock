@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cat_clock/animation_controllers/sky_controller.dart';
+import 'package:cat_clock/config.dart';
 import 'package:cat_clock/utils/weather_condition.dart';
 import 'package:cat_clock/widgets/text/clock_face_text.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -53,11 +54,13 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
       children: <Widget>[
         ClockFaceText(
           "${temperature.round()}",
+          heightUnit,
           fontWeight: FontWeight.w400,
           fontSize: heightUnit,
         ),
         ClockFaceText(
           "°",
+          heightUnit,
           fontWeight: FontWeight.w300,
           fontSize: heightUnit,
         ),
@@ -74,6 +77,7 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
     return Flexible(
       child: ClockFaceText(
         widget.model.location,
+        heightUnit,
         fontWeight: FontWeight.w400,
         fontSize: heightUnit * 0.5,
       ),
@@ -83,6 +87,7 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
   Widget date(double heightUnit) {
     return ClockFaceText(
       "${DateFormat("EEE").format(_clockDateTime)} ${DateFormat("MM-dd").format(_clockDateTime)}",
+      heightUnit,
       fontWeight: FontWeight.w300,
       fontSize: heightUnit * 0.6,
     );
@@ -91,6 +96,7 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
   Widget time(double heightUnit) {
     return ClockFaceText(
       "${DateFormat("HH:mm").format(_clockDateTime)}",
+      heightUnit,
       fontWeight: FontWeight.w400,
       fontSize: heightUnit * 2,
     );
@@ -140,7 +146,7 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
                 controller: _skyController,
                 fit: BoxFit.cover,
               ),
-              frontWidgets(constraints.biggest.height / 10),
+              frontWidgets(constraints.biggest.height / heightUnitRatio),
             ],
           ),
         );

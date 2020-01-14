@@ -5,8 +5,9 @@ class ClockFaceText extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final double height;
+  final double heightUnit;
 
-  const ClockFaceText(this.text,
+  const ClockFaceText(this.text, this.heightUnit,
       {this.fontSize, this.fontWeight = FontWeight.w400, this.height});
 
   @override
@@ -22,8 +23,8 @@ class ClockFaceText extends StatelessWidget {
           shadows: [
             Shadow(
               offset: Offset.zero,
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: fontSize * 0.1,
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: heightUnit * 0.08,
             )
           ]),
     );
