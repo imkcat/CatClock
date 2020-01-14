@@ -1,15 +1,26 @@
-# Flutter Clock
+# CatClock
 
-Welcome to Flutter Clock!
+A beautiful sky clock app builded with [flutter](https://flutter.dev/).
 
-See [flutter.dev/clock](https://flutter.dev/clock) for how to get started, submission requirements, contest rules, and FAQs.
+> This project is submitted to [Flutter Clock challenge](https://flutter.dev/clock)
 
-See a [live demo](https://maryx.github.io/flutter_clock) with Flutter for Web!
+## Getting Started
 
-Example [Analog Clock](analog_clock)
+```bash
+cd cat_clock
+flutter create .
+flutter run
+```
 
-<img src='analog_clock/analog.gif' width='350'>
+## Screenshots
 
-Example [Digital Clock](digital_clock)
+| Time    | Screenshot                |
+| ------- | ------------------------- |
+| Morning | ![1](./screenshots/1.png) |
+| Noon    | ![2](./screenshots/2.png) |
+| Sunset  | ![3](./screenshots/3.png) |
+| Night   | ![4](./screenshots/4.png) |
 
-<img src='digital_clock/digital.gif' width='350'>
+## License
+
+CatClock is available under the MIT license. See the LICENSE file for more info.
