@@ -1,16 +1,26 @@
-# cat_clock
+# CatClock
 
-A new Flutter project.
+A beautiful sky clock app builded with [flutter](https://flutter.dev/).
+
+> This project is submitted to [Flutter Clock challenge](https://flutter.dev/clock)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+```bash
+cd cat_clock
+flutter create .
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Screenshots
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+| Time    | Screenshot                |
+| ------- | ------------------------- |
+| Morning | ![1](./screenshots/1.png) |
+| Noon    | ![2](./screenshots/2.png) |
+| Sunset  | ![3](./screenshots/3.png) |
+| Night   | ![4](./screenshots/4.png) |
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## License
+
+CatClock is available under the MIT license. See the LICENSE file for more info.
