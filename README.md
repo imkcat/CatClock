@@ -4,6 +4,8 @@ A beautiful sky clock app builded with [flutter](https://flutter.dev/).
 
 > This project is submitted to [Flutter Clock challenge](https://flutter.dev/clock)
 
+[Web live demo](https://imkcat.github.io/CatClock-Pages/)
+
 ## Getting Started
 
 ```bash
