@@ -74,7 +74,7 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
   }
 
   Widget address(double heightUnit) {
-    return Flexible(
+    return Expanded(
       child: ClockFaceText(
         widget.model.location,
         heightUnit,
@@ -93,25 +93,39 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
     );
   }
 
-  Widget time(double heightUnit) {
+  Widget partOfDay(double heightUnit) {
+    String partOfDayString = "";
+    if (_clockDateTime.hour < 12) {
+      partOfDayString = "AM";
+    } else {
+      partOfDayString = "PM";
+    }
     return ClockFaceText(
-      "${DateFormat("HH:mm").format(_clockDateTime)}",
+      partOfDayString,
       heightUnit,
       fontWeight: FontWeight.w400,
-      fontSize: heightUnit * 2,
+      fontSize: heightUnit * 0.5,
+    );
+  }
+
+  Widget time(double heightUnit) {
+    return ClockFaceText(
+      "${DateFormat(widget.model.is24HourFormat ? "HH:mm" : "hh:mm").format(_clockDateTime)}",
+      heightUnit,
+      fontWeight: FontWeight.w400,
+      fontSize: heightUnit * 1.7,
     );
   }
 
   Widget frontWidgets(double heightUnit) {
     return Padding(
-      padding: EdgeInsets.all(heightUnit),
+      padding: EdgeInsets.all(heightUnit * 0.5),
       child: Column(
         children: <Widget>[
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               temperature(heightUnit),
-              // weather(heightUnit),
             ],
           ),
           Spacer(),
@@ -120,11 +134,12 @@ class _CatClockState extends State<CatClock> with WidgetsBindingObserver {
             children: <Widget>[date(heightUnit)],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: <Widget>[
               address(heightUnit),
+              if (!widget.model.is24HourFormat) partOfDay(heightUnit),
+              SizedBox(width: heightUnit * 0.2),
               time(heightUnit),
             ],
           )

@@ -23,7 +23,7 @@ class ClockFaceText extends StatelessWidget {
           shadows: [
             Shadow(
               offset: Offset.zero,
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withOpacity(0.45),
               blurRadius: heightUnit * 0.08,
             )
           ]),
