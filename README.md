@@ -16,10 +16,10 @@ flutter run
 
 | Time    | Screenshot                |
 | ------- | ------------------------- |
-| Morning | ![1](./screenshots/1.png) |
-| Noon    | ![2](./screenshots/2.png) |
-| Sunset  | ![3](./screenshots/3.png) |
-| Night   | ![4](./screenshots/4.png) |
+| Morning | ![1](./screenshots/1.PNG) |
+| Noon    | ![2](./screenshots/2.PNG) |
+| Sunset  | ![3](./screenshots/3.PNG) |
+| Night   | ![4](./screenshots/4.PNG) |
 
 ## License
 
